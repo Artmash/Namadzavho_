@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Happy Valentine's Day · for you</title>
+    <!-- no external libs, pure vanilla -->
+    <style>
+      /* ========== style.css ========== */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+          Roboto, Helvetica, Arial, sans-serif;
+      }
+
+      body {
+        background: linear-gradient(
+          145deg,
+          #fff5f7 0%,
+          #ffe2e6 40%,
+          #ffd9e2 100%
+        );
+        min-height: 100vh;
+        color: #2d1e2f;
+        line-height: 1.5;
+        overflow-x: hidden;
+        position: relative;
+      }
+
+      /* custom glow & smooth scroll */
+      html {
+        scroll-behavior: smooth;
+      }
+
+      /* floating hearts + petals global container */
+      .floating-elements {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 0;
+        overflow: hidden;
+      }
+
+      .heart-float,
+      .petal-float {
+        position: absolute;
+        color: rgba(255, 120, 140, 0.4);
+        font-size: 1.8rem;
+        opacity: 0.6;
+        user-select: none;
+        animation: floatUp 18s infinite ease-in-out;
+        filter: drop-shadow(0 8px 12px rgba(255, 80, 120, 0.2));
+      }
+
+      .petal-float {
+        color: #ffb7c5;
+        font-size: 2rem;
+        opacity: 0.3;
+        animation: driftPetals 24s infinite linear;
+        transform-origin: center;
+      }
+
+      @keyframes floatUp {
+        0% {
+          transform: translateY(110vh) rotate(0deg) scale(1);
+          opacity: 0.5;
+        }
+        70% {
+          opacity: 0.7;
+        }
+        100% {
+          transform: translateY(-20vh) rotate(20deg) scale(1.1);
+          opacity: 0;
+        }
+      }
+
+      @keyframes driftPetals {
+        0% {
+          transform: translateX(-10vw) translateY(100vh) rotate(0deg);
+          opacity: 0.4;
+        }
+        50% {
+          opacity: 0.8;
+        }
+        100% {
+          transform: translateX(110vw) translateY(-10vh) rotate(360deg);
+          opacity: 0;
+        }
+      }
+
+      /* main content layer */
+      .content {
+        position: relative;
+        z-index: 5;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem 2rem 1rem;
+      }
+
+      /* soft cards & glassmorphism */
+      .card,
+      .reason-card,
+      .promise-box {
+        backdrop-filter: blur(8px);
+        background: rgba(255, 255, 255, 0.5);
+        border-radius: 42px;
+        box-shadow: 0 20px 40px -12px rgba(210, 70, 110, 0.25),
+          0 0 0 1px rgba(255, 255, 255, 0.7) inset,
+          0 0 30px rgba(255, 200, 220, 0.6);
+        padding: 2.5rem 2rem;
+        transition: all 0.3s ease;
+      }
+
+      /* sections fade on scroll */
+      .fade-section {
+        opacity: 0;
+        transform: translateY(28px);
+        transition: opacity 0.9s cubic-bezier(0.2, 0.9, 0.3, 1),
+          transform 0.9s cubic-bezier(0.2, 0.9, 0.3, 1);
+        margin-bottom: 5rem;
+      }
+
+      .fade-section.revealed {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      /* typography premium */
+      h1,
+      h2,
+      h3 {
+        font-weight: 600;
+        letter-spacing: -0.02em;
+        line-height: 1.2;
+      }
+
+      h1 {
+        font-size: clamp(3.5rem, 12vw, 6rem);
+        background: linear-gradient(130deg, #d42b5a, #ff7b9c, #ff3754);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        text-shadow: 0 0 20px #ffb6d0, 0 4px 12px rgba(255, 90, 130, 0.4);
+        margin-bottom: 0.5rem;
+      }
+
+      .hero-sub {
+        font-size: 1.7rem;
+        font-weight: 400;
+        color: #782b46;
+        text-shadow: 0 2px 10px rgba(255, 255, 255, 0.8);
+        margin-bottom: 1.5rem;
+      }
+
+      /* hero */
+      .hero {
+        text-align: center;
+        padding: 2.5rem 1rem 1.5rem;
+        margin-bottom: 4rem;
+        position: relative;
+      }
+
+      .sparkle-hero {
+        position: relative;
+        display: inline-block;
+      }
+
+      .sparkle-hero::after {
+        content: "✨❤️✨";
+        position: absolute;
+        top: -30px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 2.8rem;
+        opacity: 0.5;
+        animation: sparkleGlow 3s infinite;
+        white-space: nowrap;
+        pointer-events: none;
+        filter: drop-shadow(0 0 6px #ff95a8);
+      }
+
+      @keyframes sparkleGlow {
+        0% {
+          opacity: 0.3;
+          transform: translateX(-50%) scale(1);
+        }
+        50% {
+          opacity: 0.9;
+          transform: translateX(-50%) scale(1.1);
+        }
+        100% {
+          opacity: 0.3;
+          transform: translateX(-50%) scale(1);
+        }
+      }
+
+      /* main message */
+      .main-message {
+        font-size: 1.5rem;
+        max-width: 720px;
+        margin: 2rem auto 3rem;
+        background: rgba(255, 245, 245, 0.7);
+        border-radius: 70px;
+        padding: 2rem 2.5rem;
+        box-shadow: 0 18px 30px -10px rgba(200, 70, 100, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.8);
+        color: #511c2f;
+        font-weight: 350;
+        backdrop-filter: blur(5px);
+      }
+
+      /* reason grid */
+      .reasons-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 2rem;
+        margin-top: 2.5rem;
+      }
+
+      .reason-card {
+        padding: 2rem 1.5rem;
+        background: rgba(255, 240, 242, 0.7);
+        border-radius: 36px;
+        text-align: center;
+        font-weight: 450;
+        font-size: 1.25rem;
+        box-shadow: 0 15px 25px -8px rgba(255, 100, 140, 0.3);
+        transition: all 0.2s ease;
+        border: 1px solid rgba(255, 255, 255, 0.9);
+      }
+
+      .reason-card:hover {
+        transform: scale(1.03) translateY(-6px);
+        background: rgba(255, 245, 245, 0.9);
+        box-shadow: 0 25px 35px -6px #ff88aa;
+      }
+
+      .reason-card::before {
+        content: "🌸";
+        display: block;
+        font-size: 2rem;
+        margin-bottom: 0.75rem;
+        opacity: 0.8;
+      }
+
+      /* promise section */
+      .promise-box {
+        background: rgba(255, 235, 240, 0.6);
+        border-radius: 48px;
+        text-align: center;
+        font-size: 1.6rem;
+        padding: 2.8rem 2rem;
+        border: 2px solid rgba(255, 220, 230, 0.9);
+        box-shadow: 0 20px 35px -8px #ffb6c1;
+        margin: 2rem 0 3rem;
+        font-weight: 380;
+        line-height: 1.6;
+      }
+
+      .big-question {
+        font-size: clamp(2.8rem, 8vw, 4.8rem);
+        text-align: center;
+        color: #a1324b;
+        margin: 3rem 0 2.5rem;
+        text-shadow: 0 0 15px #ffa5b9, 0 4px 10px white;
+        font-weight: 600;
+        letter-spacing: -0.01em;
+      }
+
+      /* buttons */
+      .buttons-container {
+        display: flex;
+        gap: 2rem;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin: 3rem 0 4rem;
+      }
+
+      .btn {
+        border: none;
+        background: linear-gradient(135deg, #ff90aa, #ff5775);
+        color: white;
+        font-size: 2rem;
+        font-weight: 600;
+        padding: 1rem 3.2rem;
+        border-radius: 80px;
+        cursor: pointer;
+        box-shadow: 0 15px 25px -6px #e05a7a,
+          0 0 0 2px rgba(255, 255, 240, 0.7) inset;
+        transition: all 0.2s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        letter-spacing: 1px;
+        backdrop-filter: blur(4px);
+        border: 1px solid rgba(255, 255, 255, 0.5);
+      }
+
+      .btn:hover {
+        transform: scale(1.07) translateY(-5px);
+        box-shadow: 0 25px 35px -4px #b84c6a, 0 0 25px #ffb7c7;
+        background: linear-gradient(135deg, #ffa0bb, #ff6988);
+      }
+
+      .btn:active {
+        transform: scale(0.97);
+        box-shadow: 0 8px 15px -2px #b34a62;
+      }
+
+      .btn-shy {
+        background: rgba(255, 230, 235, 0.9);
+        color: #a53f5a;
+        box-shadow: 0 10px 20px -5px #eb91aa;
+        backdrop-filter: blur(10px);
+        border: 2px solid white;
+      }
+
+      /* response message (toast like) */
+      .response-message {
+        text-align: center;
+        font-size: 2rem;
+        padding: 1.8rem;
+        border-radius: 70px;
+        background: rgba(255, 250, 245, 0.8);
+        backdrop-filter: blur(16px);
+        max-width: 700px;
+        margin: 1rem auto 2rem;
+        box-shadow: 0 15px 35px -6px #ff90b0;
+        color: #9f334f;
+        border: 2px solid white;
+        transition: all 0.3s;
+        font-weight: 450;
+      }
+
+      /* footer */
+      .footer {
+        text-align: center;
+        font-size: 1.4rem;
+        padding: 3rem 0 1.5rem;
+        color: #b1546c;
+        border-top: 2px dashed rgba(255, 160, 180, 0.5);
+        margin-top: 5rem;
+        opacity: 0.8;
+      }
+
+      /* name highlight (can be changed via js variable) */
+      .name-highlight {
+        background: linear-gradient(120deg, #feb0c2, #ffccd9);
+        padding: 0.1rem 0.8rem;
+        border-radius: 60px;
+        font-weight: 600;
+        color: #a01d44;
+        display: inline-block;
+      }
+
+      /* simple confetti / burst effect */
+      .burst-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 1000;
+      }
+
+      .burst-particle {
+        position: absolute;
+        font-size: 2rem;
+        animation: burstAnim 1.8s forwards ease-out;
+        color: #ff4070;
+        filter: drop-shadow(0 0 8px hotpink);
+      }
+
+      @keyframes burstAnim {
+        0% {
+          transform: scale(1) translate(0, 0);
+          opacity: 1;
+        }
+        100% {
+          transform: scale(0.3) translate(var(--tx), var(--ty)) rotate(360deg);
+          opacity: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- floating hearts & petals injected via JS, also static backup -->
+    <div class="floating-elements" id="floatingContainer"></div>
+
+    <!-- main content -->
+    <div class="content">
+      <!-- hero -->
+      <section class="hero fade-section" id="hero">
+        <div class="sparkle-hero">
+          <h1>Happy Valentine’s Day ❤️</h1>
+        </div>
+        <div class="hero-sub">To the most beautiful girl I know…</div>
+      </section>
+
+      <!-- main romantic message (heartfelt) -->
+      <section class="fade-section">
+        <div class="main-message">
+          AS you migth know , writing is not my best skill , but i was Inspired
+          by the video you sent me to create this . I just wanted you to know
+          that you're genuinely special , your kindness, your laugh, the way you
+          see the world. This little page is made with thoughts of you.
+        </div>
+      </section>
+
+      <!-- footer -->
+      <div class="footer">
+        Made with love, just for
+        <span class="name-highlight" id="herNameTag">you</span> 💕
+      </div>
+    </div>
+
+    <!-- container for confetti bursts -->
+    <div class="burst-container" id="burstContainer"></div>
+
+    <script>
+      // ================= script.js =================
+      (function () {
+        // --- CONFIG: easily change her name here ---
+        const HER_NAME = "Namadzavho"; // <-- change to her name
+        // also updates footer highlight
+        document.getElementById("herNameTag").innerText = HER_NAME;
+
+        // --- Predefine reasons (4-6 cute ones) ---
+        const reasons = [
+          "Your smile lights up any room",
+          "You have the kindest heart",
+          "You're incredibly smart & witty",
+          "You appreciate small things",
+          "You make me feel understood",
+          "Your energy is pure magic ✨",
+        ];
+
+        // render reasons grid
+        const reasonsGrid = document.getElementById("reasonsGrid");
+        reasonsGrid.innerHTML = ""; // clear if any placeholder
+        reasons.forEach((r) => {
+          const card = document.createElement("div");
+          card.className = "reason-card";
+          card.innerText = r;
+          reasonsGrid.appendChild(card);
+        });
+
+        // --- floating hearts & petals generator (continuous) ---
+        const floatingContainer = document.getElementById("floatingContainer");
+        const heartSymbols = ["❤️", "🧡", "💖", "💗", "💘", "💝", "♥️"];
+        const petalSymbols = ["🌸", "🌹", "🌺", "🌷", "🍓", "✨", "🌸"]; // flowers/strawb
+
+        function createFloatingElement(type = "heart") {
+          const el = document.createElement("div");
+          const isHeart = type === "heart";
+          el.className = isHeart ? "heart-float" : "petal-float";
+          const symbolSet = isHeart ? heartSymbols : petalSymbols;
+          el.innerText =
+            symbolSet[Math.floor(Math.random() * symbolSet.length)];
+          // random styles
+          const size = Math.random() * 1.6 + 1; // rem
+          el.style.fontSize = size + "rem";
+          el.style.left = Math.random() * 100 + "%";
+          el.style.animationDelay = Math.random() * 12 + "s";
+          el.style.animationDuration = Math.random() * 12 + 12 + "s";
+          el.style.opacity = Math.random() * 0.5 + 0.2;
+          floatingContainer.appendChild(el);
+
+          // remove after animation to avoid infinite buildup
+          setTimeout(() => {
+            if (el.parentNode) el.remove();
+          }, 28000);
+        }
+
+        // initial creation and keep adding
+        for (let i = 0; i < 14; i++) {
+          setTimeout(() => createFloatingElement("heart"), i * 200);
+          setTimeout(() => createFloatingElement("petal"), i * 300 + 100);
+        }
+        setInterval(() => createFloatingElement("heart"), 900);
+        setInterval(() => createFloatingElement("petal"), 1300);
+
+        // --- scroll fade reveal ---
+        const fadeElements = document.querySelectorAll(".fade-section");
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("revealed");
+              }
+            });
+          },
+          { threshold: 0.15, rootMargin: "0px 0px -60px 0px" }
+        );
+        fadeElements.forEach((el) => observer.observe(el));
+        // also trigger ones already visible
+        window.addEventListener("load", () => {
+          fadeElements.forEach((el) => {
+            const rect = el.getBoundingClientRect();
+            if (rect.top < window.innerHeight - 80)
+              el.classList.add("revealed");
+          });
+        });
+
+        // --- burst / confetti effect (hearts burst) ---
+        function createBurst(x, y, emoji = "❤️") {
+          const burstEl = document.getElementById("burstContainer");
+          for (let i = 0; i < 24; i++) {
+            const p = document.createElement("div");
+            p.className = "burst-particle";
+            p.innerText = ["💖", "💘", "💗", "💕", "❤️", "🌸", "🌹"][
+              Math.floor(Math.random() * 7)
+            ];
+            const angle = (i / 24) * Math.PI * 2;
+            const distance = 110 + Math.random() * 160;
+            const tx = Math.cos(angle) * distance * (0.5 + Math.random() * 0.7);
+            const ty =
+              Math.sin(angle) * distance * (0.5 + Math.random() * 0.7) - 70;
+            p.style.setProperty("--tx", tx + "px");
+            p.style.setProperty("--ty", ty + "px");
+            p.style.left = (x || window.innerWidth / 2) + "px";
+            p.style.top = (y || window.innerHeight / 2) + "px";
+            p.style.fontSize = Math.random() * 2 + 1.2 + "rem";
+            p.style.color = `hsl(${Math.random() * 20 + 340}, 80%, 70%)`;
+            burstEl.appendChild(p);
+            setTimeout(() => p.remove(), 1700);
+          }
+        }
+
+        // --- button interactions ---
+        const yesBtn = document.getElementById("yesBtn");
+        const shyBtn = document.getElementById("shyBtn");
+        const responseArea = document.getElementById("responseArea");
+
+        yesBtn.addEventListener("click", function (e) {
+          const rect = e.target.getBoundingClientRect();
+          const x = rect.left + rect.width / 2;
+          const y = rect.top + rect.height / 2 - 30;
+          createBurst(x, y, "💖");
+          // extra confetti all over
+          setTimeout(
+            () =>
+              createBurst(window.innerWidth / 2, window.innerHeight / 2, "💘"),
+            80
+          );
+          setTimeout(
+            () =>
+              createBurst(window.innerWidth / 3, window.innerHeight / 3, "🌸"),
+            150
+          );
+
+          responseArea.innerText = "You just made my whole day 😭💘";
+          responseArea.style.background = "rgba(255, 230, 240, 0.9)";
+          responseArea.style.boxShadow = "0 0 45px #ffa7c0";
+        });
+
+        shyBtn.addEventListener("click", function (e) {
+          // soft shy burst (tiny)
+          const rect = e.target.getBoundingClientRect();
+          const x = rect.left + rect.width / 2;
+          const y = rect.top + rect.height / 2;
+          for (let i = 0; i < 10; i++) {
+            const p = document.createElement("div");
+            p.className = "burst-particle";
+            p.innerText = ["🌸", "🌷", "💗", "🙈"][
+              Math.floor(Math.random() * 4)
+            ];
+            const angle = (i / 10) * Math.PI * 2;
+            const tx = Math.cos(angle) * 70;
+            const ty = Math.sin(angle) * 70 - 30;
+            p.style.setProperty("--tx", tx + "px");
+            p.style.setProperty("--ty", ty + "px");
+            p.style.left = x + "px";
+            p.style.top = y + "px";
+            p.style.fontSize = "2rem";
+            document.getElementById("burstContainer").appendChild(p);
+            setTimeout(() => p.remove(), 1500);
+          }
+          responseArea.innerText =
+            "That’s okay… I’ll still keep you in my heart 💗";
+          responseArea.style.background = "rgba(250, 235, 240, 0.9)";
+        });
+
+        // subtle extra: if she clicks on response, clear? not needed
+      })();
+    </script>
+    <!-- small additional inline for name in subtitle (optional dynamic) -->
+    <script>
+      (function secondPass() {
+        // also patch hero subtitle with name if you want, but gentle
+        const name = document.getElementById("herNameTag").innerText;
+        const subtitle = document.querySelector(".hero-sub");
+        if (subtitle && !subtitle.innerText.includes(name)) {
+          subtitle.innerText = `To the most beautiful girl I know, ${name} ❤️`;
+        }
+        // modify main message to include name?
+        const mainMsg = document.querySelector(".main-message");
+        if (mainMsg) {
+          // make it slightly more personal, but keep gentle
+          mainMsg.innerHTML = mainMsg.innerHTML.replace(
+            "you",
+            `<span class="name-highlight" style="background:transparent;padding:0;">${name}</span>`
+          );
+        }
+      })();
+    </script>
+  </body>
+</html>
